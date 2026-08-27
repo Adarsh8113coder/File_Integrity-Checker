@@ -19,7 +19,6 @@ def calculate_hash(filepath):
     sha256 = hashlib.sha256()
     try:
         with open(filepath, "rb") as f:
-            # Read in chunks so large files don't eat up all your memory
             for chunk in iter(lambda: f.read(4096), b""):
                 sha256.update(chunk)
         return sha256.hexdigest()
@@ -36,13 +35,9 @@ def load_baseline():
 
 
 def save_baseline(baseline):
-    """Save the current hashes as the new baseline."""
     with open(BASELINE_FILE, "w") as f:
-        json.dump(baseline, f, indent=2)
-
-
+        json.dump(baseline, f, indent=2
 def add_files_to_baseline(filepaths):
-    """Hash the given files and add/update them in the baseline."""
     baseline = load_baseline()
     for path in filepaths:
         file_hash = calculate_hash(path)
@@ -56,7 +51,6 @@ def add_files_to_baseline(filepaths):
 
 
 def check_integrity():
-    """Compare current file hashes against the saved baseline."""
     baseline = load_baseline()
     if not baseline:
         print("No baseline found. Add files to a baseline first (option 1).")
